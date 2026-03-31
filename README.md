@@ -1,75 +1,37 @@
-# React + TypeScript + Vite
+# エンジニア課題
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 実装した画面
+![TOPページのスクリーンショット](./src/assets/top-view.png)
 
-Currently, two official plugins are available:
+## 実装したソート
+- バブルソート
+- 選択ソート
+- クイックソート
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 実行方法
+1. ライブラリをインストールする。
+```sh
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. ローカルサーバーを立ち上げる。
+```sh
+pnpm run dev
 ```
+3. http://localhost:5173/ にアクセスし、画面を表示する。
+
+4. アルゴリズムを選択し、入力欄にカンマ区切りで数値を入力して、実行ボタンをクリックすると、出力が表示される。
+
+
+## 良かった点
+### バブルソート
+- 実装がシンプルで、分かりやすい。
+- 要素数が少ない場合に、クイックソートより速い（比較数が少ない）ことがある。
+
+### クイックソート
+- 要素数が多くても、比較的高速である。
+- 再帰的な処理の理解が深まった。
+
+## 補足
+- 3つのソートを実装しているのは、最初に実装したバブルソートと選択ソートの良かった点が近しいものになってしまったので、より違いが出るクイックソートを追加で実装したからになります。
+- 実装にAIは使用していませんが、Codexの設定により最初のPRに対して自動的にレビューコメントがつけられてしまいました。そのコメント内容に関してはそのままにしております。ご理解のほどよろしくお願いいたします。
