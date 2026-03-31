@@ -1,12 +1,58 @@
 import { useState } from "react";
 
+const SORT_MODES = [
+  {
+    key: "Bubble",
+    label: "バブルソート",
+  },
+  {
+    key: "Selection",
+    label: "選択ソート",
+  },
+] as const;
+type SortModeType = (typeof SORT_MODES)[number]["key"];
+const sortModeKey = SORT_MODES.reduce(
+  (acc, cur) => {
+    acc[cur.key] = cur.key;
+    return acc;
+  },
+  {} as Record<SortModeType, SortModeType>,
+);
+
 function App() {
+  const [selectedSortMode, setSelectedSortMode] = useState<SortModeType>(
+    sortModeKey.Bubble,
+  );
   const [inputValue, setInputValue] = useState("");
   const [outputValue, setOutputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  /** 文字列を数値の配列に変換し、バブルソートで並び替える関数 */
-  const handleBubbleSort = () => {
+  /** 選択したソートで並び替えた配列を返す関数 */
+  const handleSort = (arr: number[], sortMode: SortModeType) => {
+    const copy = [...arr];
+
+    if (sortMode === sortModeKey.Bubble) {
+      for (let i = 0; i < copy.length; i++) {
+        for (let j = 0; j < copy.length - i - 1; j++) {
+          if (copy[j] > copy[j + 1]) {
+            [copy[j + 1], copy[j]] = [copy[j], copy[j + 1]];
+          }
+        }
+      }
+      return copy;
+    }
+
+    for (let i = 0; i < copy.length; i++) {
+      let minIndex = i;
+      for (let j = i; j < copy.length; j++) {
+        if (copy[j] < copy[minIndex]) minIndex = j;
+      }
+      [copy[i], copy[minIndex]] = [copy[minIndex], copy[i]];
+    }
+    return copy;
+  };
+
+  const handleClickActionBtn = () => {
     setErrorMessage("");
 
     const originalArr = inputValue
@@ -19,21 +65,26 @@ function App() {
       return;
     }
 
-    for (let i = 0; i < originalArr.length; i++) {
-      for (let j = 0; j < originalArr.length - i - 1; j++) {
-        if (originalArr[j] > originalArr[j + 1]) {
-          [originalArr[j + 1], originalArr[j]] = [
-            originalArr[j],
-            originalArr[j + 1],
-          ];
-        }
-      }
-    }
-    setOutputValue(originalArr.join(","));
+    const result = handleSort(originalArr, selectedSortMode);
+
+    setOutputValue(result.join(","));
   };
   return (
     <main className="max-w-300 m-auto py-8 px-4">
-      <h2 className="text-2xl mb-4">バブルソート</h2>
+      <fieldset className="fieldset mb-4">
+        <legend className="fieldset-legend">アルゴリズム</legend>
+        <select
+          className="select"
+          value={selectedSortMode}
+          onChange={(e) => setSelectedSortMode(e.target.value as SortModeType)}
+        >
+          {SORT_MODES.map((sortMode) => (
+            <option value={sortMode.key} key={sortMode.key}>
+              {sortMode.label}
+            </option>
+          ))}
+        </select>
+      </fieldset>
       <div className="flex items-center gap-4 mb-4">
         <label className="flex items-center gap-2">
           <span className="whitespace-nowrap">入力（カンマ区切り）:</span>
@@ -44,7 +95,7 @@ function App() {
             onInput={(e) => setInputValue(e.currentTarget.value)}
           />
         </label>
-        <button className="btn btn-primary" onClick={handleBubbleSort}>
+        <button className="btn btn-primary" onClick={handleClickActionBtn}>
           実行
         </button>
       </div>
